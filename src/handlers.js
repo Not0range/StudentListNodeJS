@@ -129,3 +129,15 @@ deleteButtonElem.addEventListener('click', () =>{
         });
     
 });
+
+function EditHandler(elem)
+        {
+            document.forms[0].style.display = '';
+            document.forms[0].dataset.id = elem.dataset.id;
+            document.querySelector('#confirm-button').value = 'Применить';
+            const elems = elem.parentElement.parentElement.querySelectorAll('td');
+            document.querySelector('#student-fio').value = elems[1].innerHTML;
+            document.querySelector('#student-course').value = elems[2].innerHTML;
+            document.querySelector('#student-spec').value = elems[3].innerHTML;
+            document.querySelector('#student-number').value = elems[4].innerHTML;
+        }

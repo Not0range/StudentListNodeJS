@@ -16,11 +16,11 @@ app.get('/', (req, res) =>{
     res.sendFile(path.join(__dirname+'/index.html'));
 });
 
-app.get('/student-list', (req, res) =>{
+app.get('/students', (req, res) =>{
     res.json(list);
 });
 
-app.put('/add-student', (req, res) =>{
+app.put('/students', (req, res) =>{
     if('id' in req.body && 'fio' in req.body && 'course' in req.body
         && 'spec' in req.body && 'number' in req.body)
     {
@@ -31,7 +31,7 @@ app.put('/add-student', (req, res) =>{
         res.status(400);
 });
 
-app.post('/edit-student', (req, res) =>{
+app.post('/students', (req, res) =>{
     if('id' in req.body && 'fio' in req.body && 'course' in req.body
         && 'spec' in req.body && 'number' in req.body)
     {
@@ -55,7 +55,7 @@ app.post('/edit-student', (req, res) =>{
         res.status(400);
 });
 
-app.delete('/delete-student', (req, res) =>{
+app.delete('/students', (req, res) =>{
     for(let i = 0; i < list.length; i++)
         if(req.body.indexOf(list[i].id) != -1)
             list.splice(i--, 1);

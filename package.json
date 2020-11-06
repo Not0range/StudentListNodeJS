@@ -1,0 +1,8 @@
+{
+    "name": "students-list-web-site",
+    "main": "app.js",
+    "dependencies": {
+        "express": "^4.17.1",
+        "morgan": "^1.10.0"
+    }
+}

@@ -1,5 +1,5 @@
 const express = require('express');
-const path = require('path');
+const morgan = require('morgan');
 const list = [];
 
 const hostname = '127.0.0.1';
@@ -7,14 +7,11 @@ const port = 3000;
 
 const app = express();
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/src', express.static(__dirname + '/src'))
-
-app.get('/', (req, res) =>{
-    res.sendFile(path.join(__dirname+'/index.html'));
-});
+app.use('/', express.static(__dirname + '/src'))
 
 app.get('/students', (req, res) =>{
     res.json(list);
@@ -22,7 +19,7 @@ app.get('/students', (req, res) =>{
 
 app.put('/students', (req, res) =>{
     if('id' in req.body && 'fio' in req.body && 'course' in req.body
-        && 'spec' in req.body && 'number' in req.body)
+        && 'spec' in req.body && 'number' in req.body && !isNaN(+req.body.course))
     {
         list.push(req.body);
         res.status(201);
@@ -33,7 +30,7 @@ app.put('/students', (req, res) =>{
 
 app.post('/students', (req, res) =>{
     if('id' in req.body && 'fio' in req.body && 'course' in req.body
-        && 'spec' in req.body && 'number' in req.body)
+        && 'spec' in req.body && 'number' in req.body && !isNaN(+req.body.course))
     {
         let i = 0;
         for(; i < list.length; i++)
@@ -67,5 +64,5 @@ app.get('/last-id', (req, res) =>{
     res.send(list.length == 0 ? "0" : `${+list[list.length - 1].id + 1}`);
 });
 
-app.listen(port, hostname);
+app.listen(port);
 console.log(`Running server at http://${hostname}:${port}`);

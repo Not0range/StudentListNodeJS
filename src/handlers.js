@@ -83,8 +83,11 @@ document.forms[0].onsubmit = () =>{
         const rows = document.querySelector('#table-body').querySelectorAll('tr');
         let i = 0;
         for(; i < rows.length; i++)
+        {
+            console.log(rows[i].querySelector('td').innerHTML);
             if(rows[i].querySelector('td').innerHTML == document.forms[0].dataset.id)
                 break;
+        }
 
         const cells = rows[i].querySelectorAll('td');
         cells[1].innerHTML = fio.value;
@@ -118,7 +121,8 @@ deleteButtonElem.addEventListener('click', () =>{
         alert('Не выбрано ни одной записи');
         return;
     }
-    
+    if(!confirm("Вы уверены, что хотите удалить выбранные строки?"))
+        return;
     fetch('/students', 
         {
             method: 'DELETE', 

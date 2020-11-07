@@ -49,14 +49,14 @@
             for(let i = 0; i < result.length; i++)
             {
                 const newRow = document.createElement('tr');
-                newRow.innerHTML = `<td>${result[i].id}</td>
-                                    <td>${result[i].fio}</td>
-                                    <td>${result[i].course}</td>
-                                    <td>${result[i].spec}</td>
-                                    <td>${result[i].number}</td>
+                newRow.innerHTML = `<td>${result[i][0]}</td>
+                                    <td>${result[i][1]}</td>
+                                    <td>${result[i][2]}</td>
+                                    <td>${result[i][3]}</td>
+                                    <td>${result[i][4]}</td>
                                     <td><input type="button" value="Изменить" 
-                                        data-id="${result[i].id}" onclick="EditHandler(this)"/></td>
-                                    <td><input type="checkbox" data-id="${result[i].id}"/></td>`;
+                                        data-id="${result[i][0]}" onclick="EditHandler(this)"/></td>
+                                    <td><input type="checkbox" data-id="${result[i][0]}"/></td>`;
                 document.querySelector('#table-body').append(newRow);
             }
         });

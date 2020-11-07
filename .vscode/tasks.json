@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build container",
+            "type": "shell",
+            "command": "docker build --tag studentlist:1.8 .",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run containers",
+            "type": "shell",
+            "command": "docker run --rm -d -v my_vol:/data --net=crate --name sql crate & docker run --rm -d --net=crate -p 3000:3000 --name website studentlist:1.8",
+            "problemMatcher": []
+        },
+        {
+            "label": "Stop containers",
+            "type": "shell",
+            "command": "docker stop sql & docker stop website",
+            "problemMatcher": []
+        }
+    ]
+}

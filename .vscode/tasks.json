@@ -6,7 +6,7 @@
         {
             "label": "Build container",
             "type": "shell",
-            "command": "docker build --tag studentlist:1.8 .",
+            "command": "docker build --tag studentlist:2.0 .",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -16,7 +16,7 @@
         {
             "label": "Run containers",
             "type": "shell",
-            "command": "docker run --rm -d -v my_vol:/data --net=crate --name sql crate & docker run --rm -d --net=crate -p 3000:3000 --name website studentlist:1.8",
+            "command": "docker run --rm -d -v my_vol:/data --net=crate --name sql crate & docker run --rm -d --net=crate -p 3000:3000 --name website studentlist:1.9",
             "problemMatcher": []
         },
         {

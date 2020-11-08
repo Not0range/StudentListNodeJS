@@ -2,7 +2,9 @@
     "name": "students-list-web-site",
     "main": "app.js",
     "dependencies": {
+        "cookie-parser": "^1.4.5",
         "express": "^4.17.1",
+        "jwt-simple": "^0.5.6",
         "morgan": "^1.10.0",
         "node-fetch": "^2.6.1"
     }

@@ -1,15 +1,23 @@
+fetch('/login')
+.then((chk) => {
+    if(chk.ok){
+        document.styleSheets[0].cssRules[1].style.display = '';
+        document.querySelector('#login-button').style.display = 'none';
+    }
+});
+
 const addButtonElem = document.querySelector('#add-student-button');
 addButtonElem.addEventListener('click', () => {
-    if(document.forms[0].dataset.id != '-1')
-    {
-        document.forms[0].dataset.id = '-1';
-        document.forms[0].reset();
-        document.querySelector('#confirm-button').value = 'Добавить';
-    }
-    else if(document.forms[0].style.display == 'none')
-        document.forms[0].style.display = '';
-    else
-        document.forms[0].style.display = 'none';
+if(document.forms[0].dataset.id != '-1')
+{
+    document.forms[0].dataset.id = '-1';
+    document.forms[0].reset();
+    document.querySelector('#confirm-button').value = 'Добавить';
+}
+else if(document.forms[0].style.display == 'none')
+    document.forms[0].style.display = '';
+else
+    document.forms[0].style.display = 'none';
 });
 
 const closeButtonElem = document.querySelector('#close-form-button');
@@ -134,14 +142,58 @@ deleteButtonElem.addEventListener('click', () =>{
     
 });
 
+const loginForm = document.querySelector('#login-form');
+const loginButton = document.querySelector('#login-button');
+loginButton.addEventListener('click', () =>{
+    loginForm.style.display = '';
+    loginForm.querySelector('#login-textbox').focus();
+});
+loginForm.onsubmit = () =>{
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        },
+        body: "login=" + loginForm.querySelector('#login-textbox').value 
+        + "&password=" + loginForm.querySelector('#password-textbox').value
+    })
+    .then(res => {
+        if(res.redirected)
+            location.href = res.url;
+    });
+    return false;
+};
+document.querySelector('#logout-button').onclick = () =>{
+    fetch('/logout')
+    .then(chk => {
+        if(chk.redirected)
+            location.href = chk.url;
+    })
+};
+
+loginForm.addEventListener('blur', () =>{
+    setTimeout(() =>{
+        if(document.activeElement.parentElement != loginForm)
+            loginForm.style.display = 'none';
+        }, 10);
+});
+for(let e of loginForm.children){
+    e.addEventListener('blur', () =>{
+        setTimeout(() =>{
+            if(document.activeElement.parentElement != loginForm)
+                loginForm.style.display = 'none';
+            }, 10);
+    });
+}
+
 function EditHandler(elem)
-        {
-            document.forms[0].style.display = '';
-            document.forms[0].dataset.id = elem.dataset.id;
-            document.querySelector('#confirm-button').value = 'Применить';
-            const elems = elem.parentElement.parentElement.querySelectorAll('td');
-            document.querySelector('#student-fio').value = elems[1].innerHTML;
-            document.querySelector('#student-course').value = elems[2].innerHTML;
-            document.querySelector('#student-spec').value = elems[3].innerHTML;
-            document.querySelector('#student-number').value = elems[4].innerHTML;
-        }
+{
+    document.forms[0].style.display = '';
+    document.forms[0].dataset.id = elem.dataset.id;
+    document.querySelector('#confirm-button').value = 'Применить';
+    const elems = elem.parentElement.parentElement.querySelectorAll('td');
+    document.querySelector('#student-fio').value = elems[1].innerHTML;
+    document.querySelector('#student-course').value = elems[2].innerHTML;
+    document.querySelector('#student-spec').value = elems[3].innerHTML;
+    document.querySelector('#student-number').value = elems[4].innerHTML;
+}

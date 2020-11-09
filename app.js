@@ -22,7 +22,7 @@ app.get('/students', (req, res) =>{
     fetch(`http://${sql}:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
-            'stmt':'select * from Students'
+            'stmt':'select * from Students order by id'
         })
     })
     .then(res => res.json())

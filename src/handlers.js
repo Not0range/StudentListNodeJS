@@ -166,11 +166,16 @@ loginForm.onsubmit = () =>{
             setTimeout(() => location.href = res.url, 250);
         }
         else{
-            let elem = document.createElement('p');
-            elem.id = 'error-text';
-            elem.style.color = 'red';
-            elem.innerHTML = 'Неверные имя пользователя и/или пароль';
-            loginForm.querySelector('#password-textbox').after(elem);
+            let t = loginForm.querySelector('#error-text');
+            console.log(t);
+            if(!t){
+                let elem = document.createElement('p');
+                elem.id = 'error-text';
+                console.log('asdsad');
+                elem.style.color = 'red';
+                elem.innerHTML = 'Неверные имя пользователя и/или пароль';
+                loginForm.querySelector('#password-textbox').after(elem);
+            }
         }
     });
     return false;

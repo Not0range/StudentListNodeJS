@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const jwt = require('jwt-simple');
 const cookieParser = require('cookie-parser');
 
-const sql = 'localhost'//'172.18.0.2';
+const sql = 'localhost';//'172.18.0.2';
 const hostname = '127.0.0.1';
 const port = 3000;
 const secret = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
@@ -132,15 +132,23 @@ app.get('/login', (req, res) =>{
     fetch(`http://${sql}:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
-            'stmt':`select * from Cookies Where Cookie = '${req.cookies.id}'`
+            'stmt':`Refresh table Cookies`
         })
     })
-    .then(chk => chk.json())
-    .then(chk_result => {
-        if(chk_result.rowcount > 0)
-            res.sendStatus(200);
-        else
-            res.sendStatus(401);
+    .then(() =>{
+        fetch(`http://${sql}:4200/_sql`, {
+            method: 'POST',
+            body:JSON.stringify({
+                'stmt':`select Cookies.ID, Cookies.Cookie, Logins.login from Cookies, Logins Where Cookies.Cookie = '${req.cookies.id}' and Cookies.ID = Logins.ID`
+            })
+        })
+        .then(chk => chk.json())
+        .then(chk_result => {
+            if(chk_result.rowcount > 0)
+                res.send(chk_result.rows[0][2].toString());
+            else
+                res.sendStatus(401);
+        });
     });
 });
 

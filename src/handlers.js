@@ -1,10 +1,14 @@
 fetch('/login')
-.then((chk) => {
-    if(chk.ok){
-        document.styleSheets[0].cssRules[1].style.display = '';
-        document.querySelector('#login-button').style.display = 'none';
-    }
-});
+.then(chk => {
+    if(chk.ok)
+        chk.text().then((chk_result) => {
+            console.log('a');
+            document.styleSheets[0].cssRules[0].style.display = '';
+            document.querySelector('#login-button').style.display = 'none';
+            document.querySelector('#greeting').innerHTML = `Здравствуй, ${chk_result}`;
+        });;
+})
+
 
 const addButtonElem = document.querySelector('#add-student-button');
 addButtonElem.addEventListener('click', () => {
@@ -158,31 +162,37 @@ loginForm.onsubmit = () =>{
         + "&password=" + loginForm.querySelector('#password-textbox').value
     })
     .then(res => {
-        if(res.redirected)
-            location.href = res.url;
+        if(res.ok && res.redirected){
+            setTimeout(() => location.href = res.url, 250);
+        }
+        else{
+            let elem = document.createElement('p');
+            elem.id = 'error-text';
+            elem.style.color = 'red';
+            elem.innerHTML = 'Неверные имя пользователя и/или пароль';
+            loginForm.querySelector('#password-textbox').after(elem);
+        }
     });
     return false;
 };
 document.querySelector('#logout-button').onclick = () =>{
     fetch('/logout')
-    .then(chk => {
-        if(chk.redirected)
-            location.href = chk.url;
+    .then(res => {
+        if(res.redirected)
+            location.href = res.url;
     })
 };
 
-loginForm.addEventListener('blur', () =>{
-    setTimeout(() =>{
-        if(document.activeElement.parentElement != loginForm)
-            loginForm.style.display = 'none';
-        }, 10);
-});
 for(let e of loginForm.children){
     e.addEventListener('blur', () =>{
         setTimeout(() =>{
-            if(document.activeElement.parentElement != loginForm)
+            if(document.activeElement.parentElement != loginForm){
                 loginForm.style.display = 'none';
-            }, 10);
+                let t = loginForm.querySelector('#error-text');
+                if(t)
+                    t.remove();
+            }
+        }, 10);
     });
 }
 

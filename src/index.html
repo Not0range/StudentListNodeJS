@@ -2,17 +2,13 @@
 <head>
     <title>Список студентов</title>
     <style>
-        .main-table
-        {
-            border-style: solid;
-            border-width: 1px;
-        }
         .login-hide
         {
             display: none;
         }
-        td
+        table, td
         {
+            border-collapse: collapse;
             border-style: solid;
             border-width: 1px;
         }
@@ -72,15 +68,16 @@
         <input id="confirm-button" type="submit" value="Добавить"/>
     </form>
 
-    <input id="login-button" type="button" value="Вход" style="position: absolute; right: 5%; top: 5%; width: 5%;">
-    <input id="logout-button" class="login-hide" type="button" value="Выход" style="position: absolute; right: 5%; top: 5%; width: 5%;">
+    <p id="greeting" style="position: absolute; right: 5%; top: 0%;">Здравствуй, гость</p>
+    <input id="login-button" type="button" value="Вход" style="position: absolute; right: 5%; top: 5%; width: 60px;">
+    <input id="logout-button" class="login-hide" type="button" value="Выход" style="position: absolute; right: 5%; top: 5%; width: 60px;">
 
-    <form id="login-form" method="POST" style="border-style: solid; position: absolute; display: none; right: 0%; top: 10%; width: 20%;">
+    <form id="login-form" method="POST" style="border-style: solid; position: absolute; display: none; right: 0%; top: 10%; width: 300px; background-color: white;">
         <p>Имя пользователя</p>
         <input id="login-textbox" type="text" maxlength="30"><br>
         <p>Пароль</p>
-        <input id="password-textbox" name="login" type="password" maxlength="30"><br><br>
-        <input type="submit" name="password" value="Войти" style="position: absolute; right: 0%; bottom: 0%;">
+        <input id="password-textbox" name="login" type="password" maxlength="30"><br><br><br>
+        <input type="submit" name="password" value="Войти" style="position: absolute; right: 0%; bottom: 0%; margin: 10px;">
     </form>
 
     <script>
@@ -94,9 +91,9 @@
                                     <td>${result[i][2]}</td>
                                     <td>${result[i][3]}</td>
                                     <td>${result[i][4]}</td>
-                                    <td><input class="login-hide" type="button" value="Изменить" 
+                                    <td class="login-hide"><input type="button" value="Изменить" 
                                         data-id="${result[i][0]}" onclick="EditHandler(this)"/></td>
-                                    <td><input class="login-hide" type="checkbox" data-id="${result[i][0]}"/></td>`;
+                                    <td class="login-hide"><input type="checkbox" data-id="${result[i][0]}"/></td>`;
                 document.querySelector('#table-body').append(newRow);
             }
         });

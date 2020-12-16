@@ -4,10 +4,9 @@ const fetch = require('node-fetch');
 const jwt = require('jwt-simple');
 const cookieParser = require('cookie-parser');
 
-const sql = 'localhost';//'172.18.0.2';
 const hostname = '127.0.0.1';
 const port = 3000;
-const secret = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+const secret = 'TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4=';
 
 const app = express();
 
@@ -19,7 +18,7 @@ app.use(cookieParser());
 app.use('/', express.static(__dirname + '/src'))
 
 app.get('/students', (req, res) =>{
-    fetch(`http://${sql}:4200/_sql`, {
+    fetch(`http://sql:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
             'stmt':'select * from Students order by id'
@@ -32,7 +31,7 @@ app.get('/students', (req, res) =>{
 });
 
 app.put('/students', (req, res) =>{
-    fetch(`http://${sql}:4200/_sql`, {
+    fetch(`http://sql:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
             'stmt':`select * from Cookies Where Cookie = '${req.cookies.id}'`
@@ -43,7 +42,7 @@ app.put('/students', (req, res) =>{
         if(chk_result.rowcount > 0){
             if('id' in req.body && 'fio' in req.body && 'course' in req.body
                 && 'spec' in req.body && 'number' in req.body && !isNaN(+req.body.course)){
-                fetch(`http://${sql}:4200/_sql`, {
+                fetch(`http://sql:4200/_sql`, {
                     method: 'POST',
                     body:JSON.stringify({
                         'stmt':`insert into Students 
@@ -62,7 +61,7 @@ app.put('/students', (req, res) =>{
 });
 
 app.post('/students', (req, res) =>{
-    fetch(`http://${sql}:4200/_sql`, {
+    fetch(`http://sql:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
             'stmt':`select * from Cookies Where Cookie = '${req.cookies.id}'`
@@ -73,7 +72,7 @@ app.post('/students', (req, res) =>{
         if(chk_result.rowcount > 0){
             if('id' in req.body && 'fio' in req.body && 'course' in req.body
                 && 'spec' in req.body && 'number' in req.body && !isNaN(+req.body.course)){
-                    fetch(`http://${sql}:4200/_sql`, {
+                    fetch(`http://sql:4200/_sql`, {
                         method: 'POST',
                         body:JSON.stringify({
                             'stmt':`update Students set
@@ -93,7 +92,7 @@ app.post('/students', (req, res) =>{
 });
 
 app.delete('/students', (req, res) =>{
-    fetch(`http://${sql}:4200/_sql`, {
+    fetch(`http://sql:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
             'stmt':`select * from Cookies Where Cookie = '${req.cookies.id}'`
@@ -102,7 +101,7 @@ app.delete('/students', (req, res) =>{
     .then(chk => chk.json())
     .then(chk_result => {
         if(chk_result.rowcount > 0){
-            fetch(`http://${sql}:4200/_sql`, {
+            fetch(`http://sql:4200/_sql`, {
                 method: 'POST',
                 body:JSON.stringify({
                     'stmt':`delete from Students where ${req.body.map(item => 'ID = ' + item).join(' or ')}`
@@ -116,7 +115,7 @@ app.delete('/students', (req, res) =>{
 });
 
 app.get('/last-id', (req, res) =>{
-    fetch(`http://${sql}:4200/_sql`, {
+    fetch(`http://sql:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
             'stmt':'select ID from Students Order by ID desc Limit 1'
@@ -129,14 +128,14 @@ app.get('/last-id', (req, res) =>{
 });
 
 app.get('/login', (req, res) =>{
-    fetch(`http://${sql}:4200/_sql`, {
+    fetch(`http://sql:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
             'stmt':`Refresh table Cookies`
         })
     })
     .then(() =>{
-        fetch(`http://${sql}:4200/_sql`, {
+        fetch(`http://sql:4200/_sql`, {
             method: 'POST',
             body:JSON.stringify({
                 'stmt':`select Cookies.ID, Cookies.Cookie, Logins.login from Cookies, Logins Where Cookies.Cookie = '${req.cookies.id}' and Cookies.ID = Logins.ID`
@@ -155,7 +154,7 @@ app.get('/login', (req, res) =>{
 app.post('/login', (req, res) =>{
     if('login' in req.body && 'password' in req.body)
     {
-        fetch(`http://${sql}:4200/_sql`, {
+        fetch(`http://sql:4200/_sql`, {
             method: 'POST',
             body:JSON.stringify({
                 'stmt':`select * from Logins Where login = '${req.body.login.toLowerCase()}' and password = '${req.body.password}'`
@@ -166,7 +165,7 @@ app.post('/login', (req, res) =>{
             if(result.rowcount > 0)
             {
                 let str = jwt.encode({login: req.body.login}, secret);
-                fetch(`http://${sql}:4200/_sql`, {
+                fetch(`http://sql:4200/_sql`, {
                     method: 'POST',
                     body:JSON.stringify({
                         'stmt':`select * from Cookies Where Cookie = '${str}'`
@@ -175,7 +174,7 @@ app.post('/login', (req, res) =>{
                 .then(rst2 => rst2.json())
                 .then(result2 => {
                     if(result2.rowcount == 0){
-                        fetch(`http://${sql}:4200/_sql`, {
+                        fetch(`http://sql:4200/_sql`, {
                             method: 'POST',
                             body:JSON.stringify({
                                 'stmt':`insert into Cookies values(${result.rows[0][0]}, '${str}')`
@@ -195,7 +194,7 @@ app.post('/login', (req, res) =>{
 });
 
 app.get('/logout', (req, res) =>{
-    fetch(`http://${sql}:4200/_sql`, {
+    fetch(`http://sql:4200/_sql`, {
         method: 'POST',
         body:JSON.stringify({
             'stmt':`select * from Cookies Where Cookie = '${req.cookies.id}'`
@@ -204,7 +203,7 @@ app.get('/logout', (req, res) =>{
     .then(chk => chk.json())
     .then(chk_result => {
         if(chk_result.rowcount > 0)
-            fetch(`http://${sql}:4200/_sql`, {
+            fetch(`http://sql:4200/_sql`, {
                 method: 'POST',
                 body:JSON.stringify({
                     'stmt':`delete from Cookies Where Cookie = '${req.cookies.id}'`
